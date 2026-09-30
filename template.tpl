@@ -146,7 +146,6 @@ ___TEMPLATE_PARAMETERS___
     "type": "GROUP",
     "name": "initConsentGroup",
     "displayName": "Consent types",
-    "help": "true or granted = given, anything else = denied. Without ad_storage KONTRIB sets no persistent identifier; page views are still counted in aggregate.",
     "groupStyle": "NO_ZIPPY",
     "enablingConditions": [
       {
@@ -168,6 +167,7 @@ ___TEMPLATE_PARAMETERS___
         "macrosInSelect": true,
         "simpleValueType": true,
         "defaultValue": "false",
+        "help": "true or granted = given, anything else = denied. Without ad_storage KONTRIB sets no persistent identifier; page views are still counted in aggregate.",
         "selectItems": [
           {
             "value": "true",
@@ -365,7 +365,6 @@ ___TEMPLATE_PARAMETERS___
     "type": "GROUP",
     "name": "consentGroup",
     "displayName": "Consent types",
-    "help": "true or granted = given, anything else = denied. Without ad_storage KONTRIB sets no persistent identifier; page views are still counted in aggregate.",
     "groupStyle": "NO_ZIPPY",
     "enablingConditions": [
       {
@@ -382,6 +381,7 @@ ___TEMPLATE_PARAMETERS___
         "macrosInSelect": true,
         "simpleValueType": true,
         "defaultValue": "false",
+        "help": "true or granted = given, anything else = denied. Without ad_storage KONTRIB sets no persistent identifier; page views are still counted in aggregate.",
         "selectItems": [
           {
             "value": "true",
@@ -956,24 +956,31 @@ ___TESTS___
 scenarios:
 - name: Basis laedt aa.js und uebergibt Consent Mode
   code: |-
-    const mockData = { tagType: 'init', endpoint: 'https://track.example.com/', consentSource: 'consent_mode', autoPageview: true };
+    const calls = [];
+    mock('createArgumentsQueue', () => function () { calls.push(arguments[0]); });
     mock('isConsentGranted', (k) => k === 'analytics_storage');
     mock('injectScript', (url, onSuccess) => { assertThat(url).isEqualTo('https://track.kontrib.io/aa.js'); onSuccess(); });
-    runCode(mockData);
+    runCode({ tagType: 'init', endpoint: 'https://track.example.com/', consentSource: 'consent_mode', autoPageview: true });
     assertApi('createArgumentsQueue').wasCalledWith('aa', 'aaq');
+    assertThat(calls[0]).isEqualTo('init');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Basis ohne https-Endpoint schlaegt fehl
   code: |-
+    mock('createArgumentsQueue', () => function () {});
     runCode({ tagType: 'init', endpoint: 'track.example.com' });
     assertApi('injectScript').wasNotCalled();
     assertApi('gtmOnFailure').wasCalled();
 - name: Conversion ohne Basis-Tag landet in der Warteschlange
   code: |-
+    const calls = [];
+    mock('createArgumentsQueue', () => function () { calls.push(arguments[0]); });
     runCode({ tagType: 'conversion', convName: 'purchase', orderId: '10045', value: '129,90', currency: 'EUR' });
     assertApi('injectScript').wasNotCalled();
+    assertThat(calls[0]).isEqualTo('conversion');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Ereignis ohne Namen schlaegt fehl
   code: |-
+    mock('createArgumentsQueue', () => function () {});
     runCode({ tagType: 'event', eventName: '' });
     assertApi('gtmOnFailure').wasCalled();
 
