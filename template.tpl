@@ -1,4 +1,4 @@
-___TERMS_OF_SERVICE___
+﻿___TERMS_OF_SERVICE___
 
 By creating or modifying this file you agree to Google Tag Manager's Community
 Template Gallery Developer Terms of Service available at
@@ -957,7 +957,7 @@ scenarios:
 - name: Basis laedt aa.js und uebergibt Consent Mode
   code: |-
     const calls = [];
-    mock('createArgumentsQueue', () => function () { calls.push(arguments[0]); });
+    mock('createArgumentsQueue', () => (first) => { calls.push(first); });
     mock('isConsentGranted', (k) => k === 'analytics_storage');
     mock('injectScript', (url, onSuccess) => { assertThat(url).isEqualTo('https://track.kontrib.io/aa.js'); onSuccess(); });
     runCode({ tagType: 'init', endpoint: 'https://track.example.com/', consentSource: 'consent_mode', autoPageview: true });
@@ -966,21 +966,21 @@ scenarios:
     assertApi('gtmOnSuccess').wasCalled();
 - name: Basis ohne https-Endpoint schlaegt fehl
   code: |-
-    mock('createArgumentsQueue', () => function () {});
+    mock('createArgumentsQueue', () => () => {});
     runCode({ tagType: 'init', endpoint: 'track.example.com' });
     assertApi('injectScript').wasNotCalled();
     assertApi('gtmOnFailure').wasCalled();
 - name: Conversion ohne Basis-Tag landet in der Warteschlange
   code: |-
     const calls = [];
-    mock('createArgumentsQueue', () => function () { calls.push(arguments[0]); });
+    mock('createArgumentsQueue', () => (first) => { calls.push(first); });
     runCode({ tagType: 'conversion', convName: 'purchase', orderId: '10045', value: '129,90', currency: 'EUR' });
     assertApi('injectScript').wasNotCalled();
     assertThat(calls[0]).isEqualTo('conversion');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Ereignis ohne Namen schlaegt fehl
   code: |-
-    mock('createArgumentsQueue', () => function () {});
+    mock('createArgumentsQueue', () => () => {});
     runCode({ tagType: 'event', eventName: '' });
     assertApi('gtmOnFailure').wasCalled();
 
