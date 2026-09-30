@@ -954,7 +954,7 @@ ___WEB_PERMISSIONS___
 ___TESTS___
 
 scenarios:
-- name: Basis laedt aa.js und uebergibt Consent Mode
+- name: Basis laedt das Tag und uebergibt Consent Mode
   code: |-
     const calls = [];
     mock('createArgumentsQueue', () => (first) => { calls.push(first); });
@@ -964,7 +964,7 @@ scenarios:
     assertApi('createArgumentsQueue').wasCalledWith('aa', 'aaq');
     assertThat(calls[0]).isEqualTo('init');
     assertApi('gtmOnSuccess').wasCalled();
-- name: Basis ohne https-Endpoint schlaegt fehl
+- name: Basis ohne https Endpoint schlaegt fehl
   code: |-
     mock('createArgumentsQueue', () => () => {});
     runCode({ tagType: 'init', endpoint: 'track.example.com' });
