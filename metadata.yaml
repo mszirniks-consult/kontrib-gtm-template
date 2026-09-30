@@ -1,6 +1,8 @@
 homepage: 'https://kontrib.io/'
 documentation: 'https://github.com/mszirniks-consult/kontrib-gtm-template'
 versions:
+  - sha: 6e65d42e27d58699b0f1c185eb218c9883b931d0
+    changeNotes: Removed group help texts, fixed template tests
   - sha: 2449c2e04b8d50bca82112f32bee7a0fee09e878
     changeNotes: Fixed script permission host, flattened consent fields
   - sha: 5a2c1d67412f7c86ab19f2f74b29d038ced7f996
