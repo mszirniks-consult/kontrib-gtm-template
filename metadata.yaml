@@ -1,6 +1,8 @@
 homepage: 'https://kontrib.io/'
 documentation: 'https://github.com/mszirniks-consult/kontrib-gtm-template'
 versions:
+  - sha: c41830af1de87f0ca93b26cc664f1f7cfafa619c
+    changeNotes: Test names without special characters
   - sha: f5f9f38126152835b6f44706a84b4c35b828fab5
     changeNotes: Byte order mark, test code cleanup
   - sha: 6e65d42e27d58699b0f1c185eb218c9883b931d0
