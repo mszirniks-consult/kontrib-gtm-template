@@ -23,11 +23,11 @@ Full guide: the onboarding document in your KONTRIB account, section "Installati
 ## Permissions
 
 - `access_globals`: `aa` (read/write/execute), `aaq` (read/write), `__aa_loaded` (read) — the argument queue that `aa.js` takes over
-- `inject_script`: `https://*/aa.js` — every KONTRIB tenant has its own tracking domain (`track.<customer-domain>`); the code only loads `<endpoint>/aa.js` and the endpoint must be `https://`
+- `inject_script`: `https://track.kontrib.io/aa.js` — the tag script is loaded from KONTRIB's platform domain; all data goes to the endpoint you enter (`https://track.<your-domain>`, must be `https://`)
 - `access_consent`: the four consent types, read only
 - `logging`: debug mode only
 
-Data is sent only to the endpoint you enter. No data goes to KONTRIB's own servers unless the endpoint is a KONTRIB-hosted tracking domain.
+Data is sent only to the endpoint you enter. Loading the script from track.kontrib.io transmits no visitor data; no data goes to KONTRIB's own servers unless the endpoint is a KONTRIB-hosted tracking domain.
 
 ## Source
 

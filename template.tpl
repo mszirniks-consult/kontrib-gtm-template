@@ -97,8 +97,7 @@ ___TEMPLATE_PARAMETERS___
             "type": "REGEX",
             "args": [
               "^https://[A-Za-z0-9.-]+/?$"
-            ],
-            "errorMessage": "https://track.example.com"
+            ]
           }
         ]
       },
@@ -126,94 +125,6 @@ ___TEMPLATE_PARAMETERS___
         ]
       },
       {
-        "type": "GROUP",
-        "name": "initConsentGroup",
-        "displayName": "Consent types",
-        "help": "true or granted = given, anything else = denied. Without ad_storage KONTRIB sets no persistent identifier; page views are still counted in aggregate.",
-        "groupStyle": "NO_ZIPPY",
-        "enablingConditions": [
-          {
-            "paramName": "consentSource",
-            "paramValue": "fields",
-            "type": "EQUALS"
-          }
-        ],
-        "subParams": [
-          {
-            "type": "SELECT",
-            "name": "initAdStorage",
-            "displayName": "ad_storage (marketing cookies)",
-            "macrosInSelect": true,
-            "simpleValueType": true,
-            "defaultValue": "false",
-            "selectItems": [
-              {
-                "value": "true",
-                "displayValue": "granted"
-              },
-              {
-                "value": "false",
-                "displayValue": "denied"
-              }
-            ]
-          },
-          {
-            "type": "SELECT",
-            "name": "initAdUserData",
-            "displayName": "ad_user_data (user data for advertising)",
-            "macrosInSelect": true,
-            "simpleValueType": true,
-            "defaultValue": "false",
-            "selectItems": [
-              {
-                "value": "true",
-                "displayValue": "granted"
-              },
-              {
-                "value": "false",
-                "displayValue": "denied"
-              }
-            ]
-          },
-          {
-            "type": "SELECT",
-            "name": "initAdPersonalization",
-            "displayName": "ad_personalization (personalised advertising)",
-            "macrosInSelect": true,
-            "simpleValueType": true,
-            "defaultValue": "false",
-            "selectItems": [
-              {
-                "value": "true",
-                "displayValue": "granted"
-              },
-              {
-                "value": "false",
-                "displayValue": "denied"
-              }
-            ]
-          },
-          {
-            "type": "SELECT",
-            "name": "initAnalyticsStorage",
-            "displayName": "analytics_storage (statistics)",
-            "macrosInSelect": true,
-            "simpleValueType": true,
-            "defaultValue": "false",
-            "selectItems": [
-              {
-                "value": "true",
-                "displayValue": "granted"
-              },
-              {
-                "value": "false",
-                "displayValue": "denied"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "type": "CHECKBOX",
         "name": "autoPageview",
         "checkboxText": "Send page view automatically on load",
@@ -228,6 +139,99 @@ ___TEMPLATE_PARAMETERS___
         "help": "For setup only; switch off before publishing.",
         "simpleValueType": true,
         "defaultValue": false
+      }
+    ]
+  },
+  {
+    "type": "GROUP",
+    "name": "initConsentGroup",
+    "displayName": "Consent types",
+    "help": "true or granted = given, anything else = denied. Without ad_storage KONTRIB sets no persistent identifier; page views are still counted in aggregate.",
+    "groupStyle": "NO_ZIPPY",
+    "enablingConditions": [
+      {
+        "paramName": "tagType",
+        "paramValue": "init",
+        "type": "EQUALS"
+      },
+      {
+        "paramName": "consentSource",
+        "paramValue": "fields",
+        "type": "EQUALS"
+      }
+    ],
+    "subParams": [
+      {
+        "type": "SELECT",
+        "name": "initAdStorage",
+        "displayName": "ad_storage (marketing cookies)",
+        "macrosInSelect": true,
+        "simpleValueType": true,
+        "defaultValue": "false",
+        "selectItems": [
+          {
+            "value": "true",
+            "displayValue": "granted"
+          },
+          {
+            "value": "false",
+            "displayValue": "denied"
+          }
+        ]
+      },
+      {
+        "type": "SELECT",
+        "name": "initAdUserData",
+        "displayName": "ad_user_data (user data for advertising)",
+        "macrosInSelect": true,
+        "simpleValueType": true,
+        "defaultValue": "false",
+        "selectItems": [
+          {
+            "value": "true",
+            "displayValue": "granted"
+          },
+          {
+            "value": "false",
+            "displayValue": "denied"
+          }
+        ]
+      },
+      {
+        "type": "SELECT",
+        "name": "initAdPersonalization",
+        "displayName": "ad_personalization (personalised advertising)",
+        "macrosInSelect": true,
+        "simpleValueType": true,
+        "defaultValue": "false",
+        "selectItems": [
+          {
+            "value": "true",
+            "displayValue": "granted"
+          },
+          {
+            "value": "false",
+            "displayValue": "denied"
+          }
+        ]
+      },
+      {
+        "type": "SELECT",
+        "name": "initAnalyticsStorage",
+        "displayName": "analytics_storage (statistics)",
+        "macrosInSelect": true,
+        "simpleValueType": true,
+        "defaultValue": "false",
+        "selectItems": [
+          {
+            "value": "true",
+            "displayValue": "granted"
+          },
+          {
+            "value": "false",
+            "displayValue": "denied"
+          }
+        ]
       }
     ]
   },
@@ -298,8 +302,7 @@ ___TEMPLATE_PARAMETERS___
             "defaultValue": "",
             "displayName": "Key",
             "name": "key",
-            "type": "TEXT",
-            "isUnique": true
+            "type": "TEXT"
           },
           {
             "defaultValue": "",
@@ -346,8 +349,7 @@ ___TEMPLATE_PARAMETERS___
             "defaultValue": "",
             "displayName": "Key",
             "name": "key",
-            "type": "TEXT",
-            "isUnique": true
+            "type": "TEXT"
           },
           {
             "defaultValue": "",
@@ -494,6 +496,9 @@ const getType = require('getType');
 const logToConsole = require('logToConsole');
 
 const CONSENT_KEYS = ['ad_storage', 'ad_user_data', 'ad_personalization', 'analytics_storage'];
+// aa.js kommt fest von der KONTRIB-Plattformdomain (dieselbe Datei wie unter <Endpoint>/aa.js); die Daten gehen an den
+// Endpoint des Mandanten. So braucht die Vorlage kein Skript-Recht mit Platzhalter-Host, das die Galerie nicht zulaesst.
+const AA_JS = 'https://track.kontrib.io/aa.js';
 const aa = createArgumentsQueue('aa', 'aaq');
 
 function granted(v) {
@@ -567,7 +572,7 @@ if (type === 'init') {
     });
   }
   if (copyFromWindow('__aa_loaded') === true) return data.gtmOnSuccess();
-  injectScript(endpoint + '/aa.js', data.gtmOnSuccess, data.gtmOnFailure, 'kontrib:' + endpoint);
+  injectScript(AA_JS, data.gtmOnSuccess, data.gtmOnFailure, 'kontrib-aa');
 } else if (type === 'pageview') {
   aa('pageview');
   data.gtmOnSuccess();
@@ -764,7 +769,7 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://*/aa.js"
+                "string": "https://track.kontrib.io/aa.js"
               }
             ]
           }
@@ -953,7 +958,7 @@ scenarios:
   code: |-
     const mockData = { tagType: 'init', endpoint: 'https://track.example.com/', consentSource: 'consent_mode', autoPageview: true };
     mock('isConsentGranted', (k) => k === 'analytics_storage');
-    mock('injectScript', (url, onSuccess) => { assertThat(url).isEqualTo('https://track.example.com/aa.js'); onSuccess(); });
+    mock('injectScript', (url, onSuccess) => { assertThat(url).isEqualTo('https://track.kontrib.io/aa.js'); onSuccess(); });
     runCode(mockData);
     assertApi('createArgumentsQueue').wasCalledWith('aa', 'aaq');
     assertApi('gtmOnSuccess').wasCalled();
