@@ -1,0 +1,5 @@
+homepage: 'https://kontrib.io/'
+documentation: 'https://github.com/mszirniks-consult/kontrib-gtm-template'
+versions:
+  - sha: 5a2c1d67412f7c86ab19f2f74b29d038ced7f996
+    changeNotes: Initial release
